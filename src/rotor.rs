@@ -14,18 +14,24 @@ impl Rotor{
         Rotor{
             forward_shifts: the_f_shifts,
             inverse_shifts: the_s_shifts,
-            turnover: the_turnover as usize,
+            turnover: (the_turnover as usize) - 97,
             turn_offset: 0,
         }
-
     }
 
     ///Turns rotor by incrementing turn_offset.
     /// resets turn_offset to zero when 26 is reached
-    pub fn turn(&mut self){
+    pub fn turn(&mut self) -> bool{
         self.turn_offset += 1;
         if self.turn_offset > 25{
             self.turn_offset -= 26;
+        }
+
+        if self.turn_offset == self.turnover{
+            true
+        }
+        else{
+            false
         }
     }
 
@@ -64,8 +70,7 @@ impl Rotor{
         if index > 25{
             index -= 26;
         }
-        println!("r:{}", c);
-        println!("{}", new);
+
         new += self.inverse_shifts[index] as i16;
 
         if new > 122{
