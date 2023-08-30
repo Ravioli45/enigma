@@ -27,6 +27,14 @@ impl Machine{
         let mut encoded: String = String::with_capacity(message.len());
 
         for c in message.chars(){
+            let c = c.to_ascii_lowercase();
+
+            //check if char is letter
+            if !c.is_alphabetic(){
+                encoded.push(c);
+                continue;
+            }
+
             //turn first
             if self.fast_rotor.turn(){
                 if self.medium_rotor.turn(){

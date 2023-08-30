@@ -1,3 +1,4 @@
+/// Represents a singular enigma machine rotor
 #[derive(Clone)]
 pub struct Rotor{
     forward_shifts: [i8; 26],
@@ -27,17 +28,13 @@ impl Rotor{
             self.turn_offset -= 26;
         }
 
-        if self.turn_offset == self.turnover{
-            true
-        }
-        else{
-            false
-        }
+        self.turn_offset == self.turnover
+
     }
 
     ///encode a character on its first time through rotor
     /// TODO pub(crate)
-    pub fn encode_forward(&self, c: &char) -> char{
+    pub(crate) fn encode_forward(&self, c: &char) -> char{
         let mut index: usize = *c as usize;
         let mut new: i16 = index as i16;
 
@@ -61,7 +58,7 @@ impl Rotor{
         (new as u8) as char
     }
     ///encode a character on its second time through rotor
-    pub fn encode_inverse(&self, c: &char) -> char{
+    pub(crate) fn encode_inverse(&self, c: &char) -> char{
         let mut index: usize = *c as usize;
         let mut new: i16 = index as i16;
 
