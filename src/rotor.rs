@@ -33,7 +33,6 @@ impl Rotor{
     }
 
     ///encode a character on its first time through rotor
-    /// TODO pub(crate)
     pub(crate) fn encode_forward(&self, c: &char) -> char{
         let mut index: usize = *c as usize;
         let mut new: i16 = index as i16;

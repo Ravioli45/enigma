@@ -1,7 +1,7 @@
-use std::io;
+use std::io::{Write, self};
 use enigma::{Rotor, Reflector, Machine};
 
-fn main() {
+fn main(){
 
     let rotor_one_f: [i8;26] = [4, 9, 10, 2, 7, 1, -3, 9, 13, 16, 3, 8, 2, 9, 10, -8, 7, 3, 0, -4, -20, -13, -21, -6, -22, -16];
     let rotor_one_i: [i8;26] = [20, 21, 22, 3, -4, -2, -1, 8, 13, 16, -9, -7, -10, -3, -2, 4, -9, 6, 0, -8, -3, -13, -9, -7, -10, -16];
@@ -22,5 +22,21 @@ fn main() {
     let mut machine_one: Machine = Machine::new(rotor_one.clone(), rotor_two.clone(), rotor_three.clone(), ukw_b.clone());
 
     //println!("{}", machine_one.encode_message("Hello world!"));
-    println!("{}", machine_one.encode_message("mfncz bbfzm!"));
+    println!("{}", machine_one.encode_message("Mfncz bbfzm!"));
+
+    let mut input: String = String::new();
+    println!("Rust Enigma v2");
+    println!("'exit' to quit");
+    loop{
+
+        print!(">");
+        io::stdout().flush().expect("flushless?");
+        io::stdin().read_line(&mut input).expect("kaboom");
+        input.pop();
+
+        if input == "exit"{
+            break;
+        }
+
+    };
 }
