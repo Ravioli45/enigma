@@ -25,15 +25,18 @@ impl Machine{
     pub fn encode_message(&mut self, message: &str) -> String{
 
         let mut encoded: String = String::with_capacity(message.len());
+        let mut was_lowercase: bool;
 
         for c in message.chars(){
-            let c = c.to_ascii_uppercase();
 
             //check if char is letter
             if !c.is_alphabetic(){
                 encoded.push(c);
                 continue;
             }
+
+            was_lowercase = c.is_ascii_lowercase();
+            let c = c.to_ascii_uppercase();
 
             //turn first
             if self.fast_rotor.turn(){
@@ -52,7 +55,12 @@ impl Machine{
             e = self.medium_rotor.encode_inverse(&e);
             e = self.fast_rotor.encode_inverse(&e);
 
-            encoded.push(e);
+            if was_lowercase{
+                encoded.push(e.to_ascii_lowercase());
+            }
+            else{
+                encoded.push(e);
+            }
 
         };
 
