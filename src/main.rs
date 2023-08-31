@@ -29,6 +29,7 @@ fn main(){
     println!("'exit' to quit");
     loop{
 
+        input.clear();
         print!(">");
         io::stdout().flush().expect("flushless?");
         io::stdin().read_line(&mut input).expect("kaboom");
