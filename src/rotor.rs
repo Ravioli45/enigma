@@ -32,7 +32,8 @@ impl Rotor{
 
     }
 
-    ///encode a character on its first time through rotor
+    /// encode a character on its first time through rotor
+    /// expects lowercase chars
     pub(crate) fn encode_forward(&self, c: &char) -> char{
         let mut index: usize = *c as usize;
         let mut new: i16 = index as i16;
@@ -57,6 +58,7 @@ impl Rotor{
         (new as u8) as char
     }
     ///encode a character on its second time through rotor
+    /// expects lowercase chars
     pub(crate) fn encode_inverse(&self, c: &char) -> char{
         let mut index: usize = *c as usize;
         let mut new: i16 = index as i16;
