@@ -33,23 +33,23 @@ impl Rotor{
     }
 
     /// encode a character on its first time through rotor
-    /// expects lowercase chars
+    /// expects uppercase chars
     pub(crate) fn encode_forward(&self, c: &char) -> char{
         let mut index: usize = *c as usize;
-        let mut new: i16 = index as i16;
+        let mut new: i8 = index as i8;
 
-        index -= 97;
+        index -= 65;
         index += self.turn_offset;
         if index > 25{
             index -= 26;
         }
 
-        new += self.forward_shifts[index] as i16;
+        new += self.forward_shifts[index];
 
-        if new > 122{
+        if new > 90{
             new -= 26;
         }
-        else if new < 97{
+        else if new < 65{
             new += 26
         }
 
@@ -58,23 +58,22 @@ impl Rotor{
         (new as u8) as char
     }
     ///encode a character on its second time through rotor
-    /// expects lowercase chars
+    /// expects uppercase chars
     pub(crate) fn encode_inverse(&self, c: &char) -> char{
         let mut index: usize = *c as usize;
-        let mut new: i16 = index as i16;
-
-        index -= 97;
+        let mut new: i8 = index as i8;
+        index -= 65;
         index += self.turn_offset;
         if index > 25{
             index -= 26;
         }
 
-        new += self.inverse_shifts[index] as i16;
+        new += self.inverse_shifts[index];
 
-        if new > 122{
+        if new > 90{
             new -= 26;
         }
-        else if new < 97{
+        else if new < 65{
             new += 26;
         }
 

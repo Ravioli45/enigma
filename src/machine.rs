@@ -27,7 +27,7 @@ impl Machine{
         let mut encoded: String = String::with_capacity(message.len());
 
         for c in message.chars(){
-            let c = c.to_ascii_lowercase();
+            let c = c.to_ascii_uppercase();
 
             //check if char is letter
             if !c.is_alphabetic(){
