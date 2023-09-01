@@ -3,15 +3,15 @@ use crate::{Rotor, Reflector};
 /// Struct representing an enigma machine
 /// Consists of three rotors and a reflector
 /// TODO implement reflector
-pub struct Machine{
-    fast_rotor: Rotor,
-    medium_rotor: Rotor,
-    slow_rotor: Rotor,
-    reflector: Reflector
+pub struct Machine<'a>{
+    fast_rotor: &'a mut Rotor,
+    medium_rotor: &'a mut Rotor,
+    slow_rotor: &'a mut Rotor,
+    reflector: &'a Reflector
 }
-impl Machine{
+impl Machine<'_>{
 
-    pub fn new(the_fast: Rotor, the_medium: Rotor, the_slow: Rotor, the_reflect: Reflector) -> Machine{
+    pub fn new<'a>(the_fast: &'a mut Rotor, the_medium: &'a mut Rotor, the_slow: &'a mut Rotor, the_reflect: &'a Reflector) -> Machine<'a>{
 
         Machine{
             fast_rotor: the_fast,
