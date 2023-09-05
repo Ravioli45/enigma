@@ -32,6 +32,21 @@ impl Rotor{
 
     }
 
+    /// Gets current rotor Position
+    pub fn get_position(&self) -> char{
+        char::from((self.turn_offset+65) as u8)
+    }
+
+    /// Sets position of rotor to given position
+    pub fn set_position(&mut self, new_position: char){
+        if new_position.is_ascii_alphabetic(){
+            self.turn_offset = (new_position.to_ascii_uppercase() as usize) - 65;
+        }
+        else{
+            panic!("Invalid position for rotor");
+        }
+    }
+
     /// encode a character on its first time through rotor
     /// expects uppercase chars
     pub(crate) fn encode_forward(&self, c: &char) -> char{
