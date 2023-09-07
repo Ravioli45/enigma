@@ -2,7 +2,6 @@ use crate::{Rotor, Reflector};
 
 /// Struct representing an enigma machine
 /// Consists of three rotors and a reflector
-/// TODO implement reflector
 pub struct Machine<'a>{
     fast_rotor: &'a mut Rotor,
     medium_rotor: &'a mut Rotor,
