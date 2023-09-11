@@ -1,21 +1,18 @@
-use std::collections::HashMap;
-
-const ALPHA: [char; 26] = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'];
-
 /// Enigma machine reflector.
 /// Sends signal back through rotors
 #[derive(Clone)]
 pub struct Reflector{
-    wiring: HashMap<char, char>,
+    wiring: [char; 26],
 }
 impl Reflector{
     pub fn new(outs: &[char; 26]) -> Reflector{
         
-        let mut w: HashMap<char, char> = HashMap::new();
+        // an ins array would always just be the alphabet in order
 
+        let mut w: [char; 26] = ['!'; 26];
         for i in 0..26{
-          w.insert(ALPHA[i], outs[i].to_ascii_uppercase());  
-        };
+            w[i] = outs[i].to_ascii_uppercase();
+        }
 
         Reflector{
             wiring: w,
@@ -24,7 +21,9 @@ impl Reflector{
     }
 
     /// Returns letter that is wired to the received letter
+    /// expects uppercase letter
     pub fn encode(&self, c: &char) -> char{
-        self.wiring[c]
+        let index = (*c as u8) as usize;
+        self.wiring[index - 65]
     }
 }
