@@ -4,7 +4,8 @@ pub struct Rotor{
     forward_shifts: [i8; 26],
     inverse_shifts: [i8; 26],
     turnover: usize,
-    turn_offset:usize,
+    turn_offset: usize,
+    ring_offset: usize,
 }
 impl Rotor{
 
@@ -17,6 +18,7 @@ impl Rotor{
             inverse_shifts: the_s_shifts,
             turnover: (the_turnover as usize) - 97,
             turn_offset: 0,
+            ring_offset: 0,
         }
     }
 
@@ -47,6 +49,21 @@ impl Rotor{
         }
     }
 
+    /// Gets current ring position
+    pub fn get_ring_setting(&self) -> char{
+        char::from((self.ring_offset+65) as u8)
+    }
+
+    /// Sets ring setting to given char
+    pub fn set_ring_setting(&mut self, new_setting: char){
+        if new_setting.is_ascii_alphabetic(){
+            self.ring_offset = (new_setting.to_ascii_uppercase() as usize) - 65;
+        }
+        else{
+            panic!("Invalid position for rotor");
+        }
+    }
+
     /// encode a character on its first time through rotor
     /// expects uppercase chars
     pub(crate) fn encode_forward(&self, c: &char) -> char{
@@ -55,8 +72,9 @@ impl Rotor{
 
         index -= 65;
         index += self.turn_offset;
+        index += 26 - self.ring_offset;
         if index > 25{
-            index -= 26;
+            index -= 26 * (index / 26);
         }
 
         new += self.forward_shifts[index];
@@ -77,10 +95,12 @@ impl Rotor{
     pub(crate) fn encode_inverse(&self, c: &char) -> char{
         let mut index: usize = *c as usize;
         let mut new: i8 = index as i8;
+
         index -= 65;
         index += self.turn_offset;
+        index += 26 - self.ring_offset;
         if index > 25{
-            index -= 26;
+            index -= 26 * (index / 26);
         }
 
         new += self.inverse_shifts[index];

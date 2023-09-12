@@ -19,10 +19,13 @@ fn main(){
     let ukw_b_out: [char; 26] = ['y', 'r', 'u', 'h', 'q', 's', 'l', 'd', 'p', 'x', 'n', 'g', 'o', 'k', 'm', 'i', 'e', 'b', 'f', 'z', 'c', 'w', 'v', 'j', 'a', 't'];
     let ukw_b: Reflector = Reflector::new(&ukw_b_out);
 
+    rotor_one.set_position('p');
+    rotor_two.set_position('d');
+    rotor_one.set_ring_setting('B');
     let mut machine_one: Machine = Machine::new(&mut rotor_one, &mut rotor_two, &mut rotor_three, &ukw_b);
 
-    //println!("{}", machine_one.encode_message("Hello world!"));
-    println!("{}", machine_one.encode_message("Mfncz bbfzm!"));
+    //println!("{}", machine_one.encode_message("abcdefghijklmnopqrstuvwxyz"));
+    println!("{}", machine_one.encode_message("Aoawa zqjzr!"));
 
     let mut input: String = String::new();
     println!("Rust Enigma v2");
