@@ -26,6 +26,9 @@ impl Machine<'_>{
         let mut encoded: String = String::with_capacity(message.len());
         let mut was_lowercase: bool;
 
+        let mut medium_will_step: bool = false;
+        let mut slow_will_step: bool = false;
+
         for c in message.chars(){
 
             //check if char is letter
@@ -36,14 +39,18 @@ impl Machine<'_>{
 
             was_lowercase = c.is_ascii_lowercase();
             let c = c.to_ascii_uppercase();
+            
+            //rotors turn one key press after turnover is reached
+            if slow_will_step{
+                self.slow_rotor.turn();
 
-            //turn first
-            if self.fast_rotor.turn(){
-                if self.medium_rotor.turn(){
-                    self.slow_rotor.turn();
-                }
+                //replicates double-step present in Enigma I
+                slow_will_step = self.medium_rotor.turn();
             }
-
+            if medium_will_step {
+                slow_will_step = self.medium_rotor.turn();
+            }
+            medium_will_step = self.fast_rotor.turn();
 
             //encode later
             let mut e: char = self.fast_rotor.encode_forward(&c);
