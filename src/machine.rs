@@ -1,5 +1,6 @@
 use crate::{Rotor, Reflector};
 
+// TODO implement plugboard
 /// Struct representing an enigma machine
 /// Consists of three rotors and a reflector
 pub struct Machine<'a>{

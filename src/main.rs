@@ -3,12 +3,12 @@ use enigma::{Rotor, Reflector, Machine};
 
 fn main(){
 
-    let rotor_one_f: [i8;26] = [4, 9, 10, 2, 7, 1, -3, 9, 13, 16, 3, 8, 2, 9, 10, -8, 7, 3, 0, -4, -20, -13, -21, -6, -22, -16];
-    let rotor_one_i: [i8;26] = [20, 21, 22, 3, -4, -2, -1, 8, 13, 16, -9, -7, -10, -3, -2, 4, -9, 6, 0, -8, -3, -13, -9, -7, -10, -16];
+    let rotor_one_f: [i8; 26] = [4, 9, 10, 2, 7, 1, -3, 9, 13, 16, 3, 8, 2, 9, 10, -8, 7, 3, 0, -4, -20, -13, -21, -6, -22, -16];
+    let rotor_one_i: [i8; 26] = [20, 21, 22, 3, -4, -2, -1, 8, 13, 16, -9, -7, -10, -3, -2, 4, -9, 6, 0, -8, -3, -13, -9, -7, -10, -16];
     let mut rotor_one: Rotor = Rotor::new(rotor_one_f, rotor_one_i, 'q');
 
-    let rotor_two_f: [i8;26] = [0, 8, 1, 7, 14, 3, 11, 13, 15, -8, 1, -4, 10, 6, -2, -13, 0, -11, 7, -6, -5, 3, -17, -2, -10, -21];
-    let rotor_two_i: [i8;26] = [0, 8, 13, -1, 21, 17, 11, 4, -3, -8, -7, -1, 2, 6, 10, 5, 0, -11, -14, -6, -13, 2, -10, -15, -3, -7];
+    let rotor_two_f: [i8; 26] = [0, 8, 1, 7, 14, 3, 11, 13, 15, -8, 1, -4, 10, 6, -2, -13, 0, -11, 7, -6, -5, 3, -17, -2, -10, -21];
+    let rotor_two_i: [i8; 26] = [0, 8, 13, -1, 21, 17, 11, 4, -3, -8, -7, -1, 2, 6, 10, 5, 0, -11, -14, -6, -13, 2, -10, -15, -3, -7];
     let mut rotor_two: Rotor = Rotor::new(rotor_two_f, rotor_two_i, 'e');
 
     
@@ -25,7 +25,7 @@ fn main(){
     let mut machine_one: Machine = Machine::new(&mut rotor_one, &mut rotor_two, &mut rotor_three, &ukw_b);
 
     //println!("{}", machine_one.encode_message("abcdefghijklmnopqrstuvwxyz"));
-    println!("{}", machine_one.encode_message("Aoawa zqjzr!"));
+    //println!("{}", machine_one.encode_message("Aoawa zqjzr!"));
 
     let mut input: String = String::new();
     println!("Rust Enigma v2");
@@ -36,10 +36,21 @@ fn main(){
         print!(">");
         io::stdout().flush().expect("flushless?");
         io::stdin().read_line(&mut input).expect("kaboom");
-        input.pop();
 
-        if input == "exit"{
-            break;
+        // pops newline character from the end of input
+        input.pop();
+        input.make_ascii_lowercase();
+
+        match &input[..] {
+            "exit" => break,
+            "encode" => {
+                print!("~");
+                io::stdout().flush().expect("flushess?");
+                input.clear();
+                io::stdin().read_line(&mut input).expect("kaboom");
+                print!("{}", machine_one.encode_message(&input));
+            }
+            _ => println!("Invalid input")
         }
 
     };
