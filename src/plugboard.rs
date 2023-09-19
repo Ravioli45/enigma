@@ -1,4 +1,10 @@
-use std::{fmt, io::Read};
+use std::fmt;
+
+pub enum ErrorType{
+    InvalidPair,
+    PairNotFound,
+    LetterIsUsed,
+}
 
 #[derive(Clone)]
 struct PlugboardPair{
@@ -43,9 +49,9 @@ impl Plugboard{
         }
     }
 
-    pub fn make_pair(&mut self, pair: &str){
+    pub fn make_pair(&mut self, pair: &str) -> Result<(), ErrorType>{
         // if pair can be turned into a valid pair
-        if pair.len() == 2 && pair.chars().all(|x| x.is_ascii_alphabetic()){
+        if Plugboard::is_valid_pair(pair){
             // seperate the chars that represent the pair
             let byte_pair = pair.as_bytes();
             let first: char = byte_pair[0].to_ascii_uppercase() as char;
@@ -55,21 +61,20 @@ impl Plugboard{
             for pair in &self.pairs{
                 if pair.contains(&first) || pair.contains(&second){
                     println!("Letters can't be used in more than one pair");
-                    return;
+                    return Err(ErrorType::LetterIsUsed);
                 }
-            };
+            }
             self.pairs.push(PlugboardPair::new(first, second));
+            Ok(())
         }
         else{
-            panic!("Invalid pair");
-        };
+            Err(ErrorType::InvalidPair)
+        }
     }
 
-    pub fn remove_pair(&mut self, pair: &str){
+    pub fn remove_pair(&mut self, pair: &str) -> Result<(), ErrorType>{
         // if pair represents a valid pair
-        if pair.len() == 2 && pair.chars().all(|x| x.is_ascii_alphabetic()){
-            let mut index: usize;
-            let mut found: bool = false;
+        if Plugboard::is_valid_pair(pair){
             // seperate the chars that represent the pair
             let byte_pair = pair.as_bytes();
             let first: char = byte_pair[0].to_ascii_uppercase() as char;
@@ -81,13 +86,13 @@ impl Plugboard{
                     //found = true;
                     // oh boy
                     self.pairs.remove(i);
-                    break;
+                    return Ok(());
                 }
             }
-
+            Err(ErrorType::PairNotFound)
         }
         else{
-            panic!("attempting to remove invalid pair")
+            Err(ErrorType::InvalidPair)
         }
     }
 
@@ -101,4 +106,19 @@ impl Plugboard{
         };
         return *c;
     }
+
+    /// returns true of pair is valid and false otherwise
+    fn is_valid_pair(pair: &str) -> bool{
+        if pair.len() == 2{
+            let mut cs = pair.chars();
+            let first: char = cs.nth(0).unwrap();
+            let second: char = cs.nth(0).unwrap();
+
+            (first.is_ascii_alphabetic() && second.is_ascii_alphabetic()) && (first != second)
+        }
+        else{
+            false
+        }
+    }
+
 }
