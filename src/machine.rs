@@ -1,4 +1,4 @@
-use crate::{Rotor, Reflector};
+use crate::{Rotor, Reflector, Plugboard};
 
 // TODO implement plugboard
 /// Struct representing an enigma machine

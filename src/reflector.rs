@@ -23,7 +23,7 @@ impl Reflector{
     /// Returns letter that is wired to the received letter
     /// expects uppercase letter
     pub fn encode(&self, c: &char) -> char{
-        let index = (*c as u8) as usize;
+        let index = *c as usize;
         self.wiring[index - 65]
     }
 }
