@@ -1,4 +1,4 @@
-use crate::{Rotor, Reflector, Plugboard};
+use crate::{Rotor, Reflector, Plugboard, plugboard::ErrorType};
 
 // TODO implement plugboard
 /// Struct representing an enigma machine
@@ -7,7 +7,8 @@ pub struct Machine<'a>{
     fast_rotor: &'a mut Rotor,
     medium_rotor: &'a mut Rotor,
     slow_rotor: &'a mut Rotor,
-    reflector: &'a Reflector
+    reflector: &'a Reflector,
+    plugboard: Plugboard,
 }
 impl Machine<'_>{
 
@@ -18,6 +19,7 @@ impl Machine<'_>{
             medium_rotor: the_medium,
             slow_rotor: the_slow,
             reflector: the_reflect,
+            plugboard: Plugboard::new(),
         }
 
     }
@@ -54,13 +56,17 @@ impl Machine<'_>{
             medium_will_step = self.fast_rotor.turn();
 
             //encode later
-            let mut e: char = self.fast_rotor.encode_forward(&c);
+            let mut e: char = self.plugboard.swap_char(&c);
+
+            e = self.fast_rotor.encode_forward(&e);
             e = self.medium_rotor.encode_forward(&e);
             e = self.slow_rotor.encode_forward(&e);
             e = self.reflector.encode(&e);
             e = self.slow_rotor.encode_inverse(&e);
             e = self.medium_rotor.encode_inverse(&e);
             e = self.fast_rotor.encode_inverse(&e);
+
+            e = self.plugboard.swap_char(&e);
 
             if was_lowercase{
                 encoded.push(e.to_ascii_lowercase());
@@ -74,4 +80,11 @@ impl Machine<'_>{
         return encoded;
     }
 
+    pub fn add_plug(&mut self, pair: &str) -> Result<(), ErrorType>{
+        self.plugboard.make_pair(pair)
+    }
+
+    pub fn remove_plug(&mut self, pair: &str) -> Result<(), ErrorType>{
+        self.plugboard.remove_pair(pair)
+    }
 }
