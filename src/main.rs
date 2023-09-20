@@ -23,6 +23,14 @@ fn main(){
     rotor_two.set_position('d');
     rotor_one.set_ring_setting('B');
     let mut machine_one: Machine = Machine::new(&mut rotor_one, &mut rotor_two, &mut rotor_three, &ukw_b);
+    match machine_one.add_plug("ob"){
+        Err(e) => println!("{:?}", e),
+        Ok(_) => println!("yes"),
+    }
+    match machine_one.add_plug("ab"){
+        Err(e) => println!("{:?}", e),
+        Ok(_) => println!("yes"),
+    }
 
     //println!("{}", machine_one.encode_message("abcdefghijklmnopqrstuvwxyz"));
     //println!("{}", machine_one.encode_message("Aoawa zqjzr!"));
