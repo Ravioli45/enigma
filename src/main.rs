@@ -32,11 +32,16 @@ fn main(){
         Err(e) => println!("{:?}", e),
         Ok(_) => println!("yes"),
     }
+    match machine_one.remove_plug("ob"){
+        Err(e) => println!("{:?}", e),
+        Ok(_) => println!("yes"),
+    }
 
     //println!("{}", machine_one.encode_message("abcdefghijklmnopqrstuvwxyz"));
     //println!("{}", machine_one.encode_message("Aoawa zqjzr!"));
 
     let mut input: String = String::new();
+    let mut words;
     println!("Rust Enigma v2");
     println!("'exit' to quit");
     loop{
@@ -46,18 +51,26 @@ fn main(){
         io::stdout().flush().expect("flushless?");
         io::stdin().read_line(&mut input).expect("kaboom");
 
-        // pops newline character from the end of input
-        input.pop();
+        // trims whitespace from input
+        input = input.trim().to_string();
         input.make_ascii_lowercase();
 
-        match &input[..] {
-            "exit" => break,
-            "encode" => {
+        words = input.split_ascii_whitespace();
+
+        match words.next() {
+            Some("exit") => break,
+            Some("encode") => {
                 print!("~");
                 io::stdout().flush().expect("flushess?");
                 input.clear();
                 io::stdin().read_line(&mut input).expect("kaboom");
                 print!("{}", machine_one.encode_message(&input));
+            }
+            Some("plug") => {
+                // TODO implement
+            }
+            Some("set") => {
+                // TODO implement
             }
             _ => println!("Invalid input")
         }
