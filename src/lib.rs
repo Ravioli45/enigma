@@ -7,5 +7,5 @@ pub use machine::Machine;
 mod reflector;
 pub use reflector::Reflector;
 
-mod plugboard;
-pub use plugboard::Plugboard;
+pub mod plugboard;
+use plugboard::Plugboard;

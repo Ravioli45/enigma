@@ -47,7 +47,7 @@ impl fmt::Display for PlugboardPair{
     }
 }
 
-pub struct Plugboard{
+pub(crate) struct Plugboard{
     pairs: Vec<PlugboardPair>
 }
 impl Plugboard{
