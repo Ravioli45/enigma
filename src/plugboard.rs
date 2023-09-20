@@ -1,26 +1,34 @@
 use std::fmt;
 
+#[derive(Debug)]
 pub enum ErrorType{
     InvalidPair,
     PairNotFound,
     LetterIsUsed,
 }
 
+/// Represents a pair of linked letters on a plugboard
 #[derive(Clone)]
 struct PlugboardPair{
     first: char,
     second: char
 }
 impl PlugboardPair{
+    /// Create a new plugboard pair
     pub fn new(the_first: char, the_second: char) -> PlugboardPair{
         PlugboardPair{
             first: the_first,
             second: the_second
         }
     }
+
+    /// check if a char c in contained in the pair
     pub fn contains(&self, c: &char) -> bool{
         self.first == *c || self.second == *c
     }
+
+    /// return other Some pair member if c in pair,
+    /// otherwise None
     pub fn other(&self, c: &char) -> Option<char>{
         if *c == self.first{
             Some(self.second)
@@ -60,7 +68,7 @@ impl Plugboard{
             // check if one of the letters is already used in a pair
             for pair in &self.pairs{
                 if pair.contains(&first) || pair.contains(&second){
-                    println!("Letters can't be used in more than one pair");
+                    //println!("Letters can't be used in more than one pair");
                     return Err(ErrorType::LetterIsUsed);
                 }
             }
