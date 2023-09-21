@@ -1,23 +1,28 @@
-use crate::{Rotor, Reflector, Plugboard, plugboard::ErrorType};
+use crate::{Rotor, Reflector, Plugboard, plugboard::ErrorType, RotorState};
 
-// TODO implement plugboard
 /// Struct representing an enigma machine
 /// Consists of three rotors and a reflector
 pub struct Machine<'a>{
-    fast_rotor: &'a mut Rotor,
-    medium_rotor: &'a mut Rotor,
-    slow_rotor: &'a mut Rotor,
+    fast_rotor: &'a Rotor,
+    medium_rotor: &'a Rotor,
+    slow_rotor: &'a Rotor,
+    fast_state: RotorState,
+    medium_state: RotorState,
+    slow_state: RotorState,
     reflector: &'a Reflector,
     plugboard: Plugboard,
 }
 impl Machine<'_>{
 
-    pub fn new<'a>(the_fast: &'a mut Rotor, the_medium: &'a mut Rotor, the_slow: &'a mut Rotor, the_reflect: &'a Reflector) -> Machine<'a>{
+    pub fn new<'a>(the_fast: &'a Rotor, the_medium: &'a Rotor, the_slow: &'a Rotor, the_reflect: &'a Reflector) -> Machine<'a>{
 
         Machine{
             fast_rotor: the_fast,
             medium_rotor: the_medium,
             slow_rotor: the_slow,
+            fast_state: RotorState::new(),
+            medium_state: RotorState::new(),
+            slow_state: RotorState::new(),
             reflector: the_reflect,
             plugboard: Plugboard::new(),
         }
@@ -29,8 +34,8 @@ impl Machine<'_>{
         let mut encoded: String = String::with_capacity(message.len());
         let mut was_lowercase: bool;
 
-        let mut medium_will_step: bool = false;
-        let mut slow_will_step: bool = false;
+        let mut medium_will_step: bool = self.fast_rotor.get_turnover() == self.fast_state.get_position();
+        let mut slow_will_step: bool = self.slow_rotor.get_turnover() == self.slow_state.get_position();
 
         for c in message.chars(){
 
@@ -45,26 +50,29 @@ impl Machine<'_>{
             
             //rotors turn one key press after turnover is reached
             if slow_will_step{
-                self.slow_rotor.turn();
+                self.slow_state.turn();
 
                 //replicates double-step present in Enigma I
-                slow_will_step = self.medium_rotor.turn();
+                self.medium_state.turn();
+                slow_will_step = self.slow_rotor.get_turnover() == self.slow_state.get_position();
             }
             if medium_will_step {
-                slow_will_step = self.medium_rotor.turn();
+                self.medium_state.turn();
+                slow_will_step = self.slow_rotor.get_turnover() == self.slow_state.get_position();
             }
-            medium_will_step = self.fast_rotor.turn();
+            self.fast_state.turn();
+            medium_will_step = self.fast_rotor.get_turnover() == self.fast_state.get_position();
 
             //encode later
             let mut e: char = self.plugboard.swap_char(&c);
 
-            e = self.fast_rotor.encode_forward(&e);
-            e = self.medium_rotor.encode_forward(&e);
-            e = self.slow_rotor.encode_forward(&e);
+            e = self.fast_rotor.encode_forward(&e, &self.fast_state);
+            e = self.medium_rotor.encode_forward(&e, &self.medium_state);
+            e = self.slow_rotor.encode_forward(&e, &self.slow_state);
             e = self.reflector.encode(&e);
-            e = self.slow_rotor.encode_inverse(&e);
-            e = self.medium_rotor.encode_inverse(&e);
-            e = self.fast_rotor.encode_inverse(&e);
+            e = self.slow_rotor.encode_inverse(&e, &self.slow_state);
+            e = self.medium_rotor.encode_inverse(&e, &self.medium_state);
+            e = self.fast_rotor.encode_inverse(&e, &self.fast_state);
 
             e = self.plugboard.swap_char(&e);
 

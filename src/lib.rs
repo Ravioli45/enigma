@@ -1,5 +1,6 @@
 mod rotor;
 pub use rotor::Rotor;
+pub(crate) use rotor::RotorState;
 
 mod machine;
 pub use machine::Machine;
