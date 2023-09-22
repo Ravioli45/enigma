@@ -1,6 +1,6 @@
 use std::io::{Write, self};
 use enigma::{Rotor, Reflector, Machine};
-use enigma::plugboard::ErrorType;
+use enigma::PlugError;
 
 fn main(){
 

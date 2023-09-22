@@ -1,6 +1,6 @@
 mod rotor;
 pub use rotor::Rotor;
-pub(crate) use rotor::RotorState;
+use rotor::RotorState;
 
 mod machine;
 pub use machine::Machine;
@@ -8,5 +8,6 @@ pub use machine::Machine;
 mod reflector;
 pub use reflector::Reflector;
 
-pub mod plugboard;
+mod plugboard;
+pub use plugboard::PlugError;
 use plugboard::Plugboard;

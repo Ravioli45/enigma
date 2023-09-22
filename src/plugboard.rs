@@ -1,7 +1,7 @@
 use std::fmt;
 
 #[derive(Debug)]
-pub enum ErrorType{
+pub enum PlugError{
     InvalidPair,
     PairNotFound,
     LetterIsUsed,
@@ -57,7 +57,7 @@ impl Plugboard{
         }
     }
 
-    pub fn make_pair(&mut self, pair: &str) -> Result<(), ErrorType>{
+    pub fn make_pair(&mut self, pair: &str) -> Result<(), PlugError>{
         // if pair can be turned into a valid pair
         if Plugboard::is_valid_pair(pair){
             // seperate the chars that represent the pair
@@ -69,18 +69,18 @@ impl Plugboard{
             for pair in &self.pairs{
                 if pair.contains(&first) || pair.contains(&second){
                     //println!("Letters can't be used in more than one pair");
-                    return Err(ErrorType::LetterIsUsed);
+                    return Err(PlugError::LetterIsUsed);
                 }
             }
             self.pairs.push(PlugboardPair::new(first, second));
             Ok(())
         }
         else{
-            Err(ErrorType::InvalidPair)
+            Err(PlugError::InvalidPair)
         }
     }
 
-    pub fn remove_pair(&mut self, pair: &str) -> Result<(), ErrorType>{
+    pub fn remove_pair(&mut self, pair: &str) -> Result<(), PlugError>{
         // if pair represents a valid pair
         if Plugboard::is_valid_pair(pair){
             // seperate the chars that represent the pair
@@ -97,10 +97,10 @@ impl Plugboard{
                     return Ok(());
                 }
             }
-            Err(ErrorType::PairNotFound)
+            Err(PlugError::PairNotFound)
         }
         else{
-            Err(ErrorType::InvalidPair)
+            Err(PlugError::InvalidPair)
         }
     }
 

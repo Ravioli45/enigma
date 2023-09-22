@@ -77,7 +77,7 @@ impl Rotor{
 }
 /// Represents the things about a rotor that can be changed fro the machine
 #[derive(Clone)]
-pub struct RotorState{
+pub(crate) struct RotorState{
     turn_offset: usize,
     ring_setting: usize,
 }

@@ -1,4 +1,4 @@
-use crate::{Rotor, Reflector, Plugboard, plugboard::ErrorType, RotorState};
+use crate::{Rotor, Reflector, Plugboard, plugboard::PlugError, RotorState};
 
 /// Struct representing an enigma machine
 /// Consists of three rotors and a reflector
@@ -108,11 +108,11 @@ impl Machine<'_>{
         self.slow_state.set_ring_setting(c);
     }
 
-    pub fn add_plug(&mut self, pair: &str) -> Result<(), ErrorType>{
+    pub fn add_plug(&mut self, pair: &str) -> Result<(), PlugError>{
         self.plugboard.make_pair(pair)
     }
 
-    pub fn remove_plug(&mut self, pair: &str) -> Result<(), ErrorType>{
+    pub fn remove_plug(&mut self, pair: &str) -> Result<(), PlugError>{
         self.plugboard.remove_pair(pair)
     }
 }
