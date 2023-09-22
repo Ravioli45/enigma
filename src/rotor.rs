@@ -4,8 +4,6 @@ pub struct Rotor{
     forward_shifts: [i8; 26],
     inverse_shifts: [i8; 26],
     turnover: usize,
-    //turn_offset: usize,
-    //ring_offset: usize,
 }
 impl Rotor{
 
@@ -17,8 +15,6 @@ impl Rotor{
             forward_shifts: the_f_shifts,
             inverse_shifts: the_s_shifts,
             turnover: (the_turnover.to_ascii_uppercase() as usize) - 65,
-            //turn_offset: 0,
-            //ring_offset: 0,
         }
     }
 

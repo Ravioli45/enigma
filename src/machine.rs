@@ -54,11 +54,11 @@ impl Machine<'_>{
 
                 //replicates double-step present in Enigma I
                 self.medium_state.turn();
-                slow_will_step = self.slow_rotor.get_turnover() == self.slow_state.get_position();
+                slow_will_step = self.medium_rotor.get_turnover() == self.medium_state.get_position();
             }
             if medium_will_step {
                 self.medium_state.turn();
-                slow_will_step = self.slow_rotor.get_turnover() == self.slow_state.get_position();
+                slow_will_step = self.medium_rotor.get_turnover() == self.medium_state.get_position();
             }
             self.fast_state.turn();
             medium_will_step = self.fast_rotor.get_turnover() == self.fast_state.get_position();
@@ -86,6 +86,26 @@ impl Machine<'_>{
         };
 
         return encoded;
+    }
+
+    // guess what these do
+    pub fn set_fast_position(&mut self, c: char){
+        self.fast_state.set_position(c);
+    }
+    pub fn set_medium_position(&mut self, c: char){
+        self.medium_state.set_position(c);
+    }
+    pub fn set_slow_position(&mut self, c: char){
+        self.slow_state.set_position(c);
+    }
+    pub fn set_fast_ring(&mut self, c: char){
+        self.fast_state.set_ring_setting(c);
+    }
+    pub fn set_medium_ring(&mut self, c: char){
+        self.medium_state.set_ring_setting(c);
+    }
+    pub fn set_slow_ring(&mut self, c: char){
+        self.slow_state.set_ring_setting(c);
     }
 
     pub fn add_plug(&mut self, pair: &str) -> Result<(), ErrorType>{
