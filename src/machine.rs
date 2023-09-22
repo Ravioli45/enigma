@@ -1,4 +1,4 @@
-use crate::{Rotor, Reflector, Plugboard, plugboard::PlugError, RotorState};
+use crate::{Rotor, Reflector, Plugboard, PlugError, RotorState, RotorError};
 
 /// Struct representing an enigma machine
 /// Consists of three rotors and a reflector
@@ -89,23 +89,23 @@ impl Machine<'_>{
     }
 
     // guess what these do
-    pub fn set_fast_position(&mut self, c: char){
-        self.fast_state.set_position(c);
+    pub fn set_fast_position(&mut self, c: char) -> Result<(), RotorError>{
+        self.fast_state.set_position(c)
     }
-    pub fn set_medium_position(&mut self, c: char){
-        self.medium_state.set_position(c);
+    pub fn set_medium_position(&mut self, c: char) -> Result<(), RotorError>{
+        self.medium_state.set_position(c)
     }
-    pub fn set_slow_position(&mut self, c: char){
-        self.slow_state.set_position(c);
+    pub fn set_slow_position(&mut self, c: char) -> Result<(), RotorError>{
+        self.slow_state.set_position(c)
     }
-    pub fn set_fast_ring(&mut self, c: char){
-        self.fast_state.set_ring_setting(c);
+    pub fn set_fast_ring(&mut self, c: char) -> Result<(), RotorError>{
+        self.fast_state.set_ring_setting(c)
     }
-    pub fn set_medium_ring(&mut self, c: char){
-        self.medium_state.set_ring_setting(c);
+    pub fn set_medium_ring(&mut self, c: char) -> Result<(), RotorError>{
+        self.medium_state.set_ring_setting(c)
     }
-    pub fn set_slow_ring(&mut self, c: char){
-        self.slow_state.set_ring_setting(c);
+    pub fn set_slow_ring(&mut self, c: char) -> Result<(), RotorError>{
+        self.slow_state.set_ring_setting(c)
     }
 
     pub fn add_plug(&mut self, pair: &str) -> Result<(), PlugError>{

@@ -1,6 +1,6 @@
 use std::io::{Write, self};
 use enigma::{Rotor, Reflector, Machine};
-use enigma::PlugError;
+use enigma::{PlugError, RotorError};
 
 fn main(){
 
@@ -24,9 +24,9 @@ fn main(){
     //rotor_two.set_position('d');
     //rotor_one.set_ring_setting('B');
     let mut machine_one: Machine = Machine::new(&rotor_one, &rotor_two, &rotor_three, &ukw_b);
-    machine_one.set_fast_position('p');
-    machine_one.set_medium_position('d');
-    machine_one.set_fast_ring('b');
+    machine_one.set_fast_position('p').unwrap();
+    machine_one.set_medium_position('d').unwrap();
+    machine_one.set_fast_ring('b').unwrap();
     match machine_one.add_plug("ob"){
         Err(e) => println!("{:?}", e),
         Ok(_) => println!("yes"),

@@ -1,3 +1,8 @@
+#[derive(Debug)]
+pub enum RotorError{
+    InvalidOption
+}
+
 /// Represents a singular enigma machine rotor
 #[derive(Clone)]
 pub struct Rotor{
@@ -98,12 +103,14 @@ impl RotorState{
         char::from((self.turn_offset+65) as u8)
     }
     /// set rotor position in machine
-    pub fn set_position(&mut self, new_position: char){
+    pub fn set_position(&mut self, new_position: char) -> Result<(), RotorError>{
         if new_position.is_ascii_alphabetic(){
             self.turn_offset = (new_position.to_ascii_uppercase() as usize) - 65;
+            Ok(())
         }
         else{
-            panic!("Invalid position for rotor");
+            //panic!("Invalid position for rotor");
+            Err(RotorError::InvalidOption)
         }
     }
     /// gets current ring setting as uppercase char
@@ -111,12 +118,14 @@ impl RotorState{
         char::from((self.ring_setting+65) as u8)
     }
     /// sets ring setting to a given char
-    pub fn set_ring_setting(&mut self, new_setting: char){
+    pub fn set_ring_setting(&mut self, new_setting: char) -> Result<(), RotorError>{
         if new_setting.is_ascii_alphabetic(){
             self.ring_setting = (new_setting.to_ascii_uppercase() as usize) - 65;
+            Ok(())
         }
         else{
-            panic!("Invalid position for rotor");
+            //panic!("Invalid position for rotor");
+            Err(RotorError::InvalidOption)
         }
     }
 }

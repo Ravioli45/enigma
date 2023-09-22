@@ -1,6 +1,7 @@
 mod rotor;
 pub use rotor::Rotor;
 use rotor::RotorState;
+pub use rotor::RotorError;
 
 mod machine;
 pub use machine::Machine;
