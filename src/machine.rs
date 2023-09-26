@@ -115,4 +115,20 @@ impl Machine<'_>{
     pub fn remove_plug(&mut self, pair: &str) -> Result<(), PlugError>{
         self.plugboard.remove_pair(pair)
     }
+
+    pub fn show_states(&self){
+
+        println!("{:>21}{:>21}{:>21}", "slow rotor:", "medium rotor:", "fast rotor:");
+        print!("positions:");
+        print!("{:>11}", self.slow_state.get_position());
+        print!("{:>21}", self.medium_state.get_position());
+        println!("{:>21}", self.fast_state.get_position());
+        print!("rings:");
+        print!("{:>15}", self.slow_state.get_ring_setting());
+        print!("{:>21}", self.medium_state.get_ring_setting());
+        println!("{:>21}", self.fast_state.get_ring_setting());
+
+        print!("Plugboard: ");
+        println!("{}", self.plugboard);
+    }
 }

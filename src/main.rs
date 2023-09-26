@@ -35,10 +35,10 @@ fn main(){
         Err(e) => println!("{:?}", e),
         Ok(_) => println!("yes"),
     }
-    match machine_one.remove_plug("ob"){
-        Err(e) => println!("{:?}", e),
-        Ok(_) => println!("yes"),
-    }
+    //match machine_one.remove_plug("ob"){
+    //    Err(e) => println!("{:?}", e),
+    //    Ok(_) => println!("yes"),
+    //}
 
     //println!("{}", machine_one.encode_message("abcdefghijklmnopqrstuvwxyz"));
     //println!("{}", machine_one.encode_message("Aoawa zqjzr!"));
@@ -74,6 +74,9 @@ fn main(){
             }
             Some("set") => {
                 // TODO implement
+            }
+            Some("show") => {
+                machine_one.show_states();
             }
             _ => println!("Invalid input")
         }

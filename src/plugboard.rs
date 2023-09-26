@@ -130,3 +130,12 @@ impl Plugboard{
     }
 
 }
+impl fmt::Display for Plugboard{
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result{
+        //todo!("Figure out how to implement")
+        for pair in &self.pairs{
+            write!(f, "{} ", pair)?;
+        }
+        Ok(())
+    }
+}
