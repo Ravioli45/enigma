@@ -12,13 +12,13 @@ pub struct Rotor{
 }
 impl Rotor{
 
-    ///Takes information and constructs a new rotor
-    ///new rotor is returned
-    pub fn new(the_f_shifts: [i8;26], the_s_shifts: [i8;26], the_turnover: char) -> Rotor{
+    ///Takes information and constructs a new rotor.
+    ///The new rotor is returned.
+    pub fn new(the_f_shifts: [i8;26], the_i_shifts: [i8;26], the_turnover: char) -> Rotor{
 
         Rotor{
             forward_shifts: the_f_shifts,
-            inverse_shifts: the_s_shifts,
+            inverse_shifts: the_i_shifts,
             turnover: (the_turnover.to_ascii_uppercase() as usize) - 65,
         }
     }
@@ -27,8 +27,8 @@ impl Rotor{
         char::from((self.turnover + 65) as u8)
     }
 
-    /// encode a character on its first time through rotor
-    /// expects uppercase chars
+    /// Encodes a char on its first time through a rotor.
+    /// Expects uppercase chars.
     pub(crate) fn encode_forward(&self, c: &char, r: &RotorState) -> char{
         let mut index: usize = *c as usize;
         let mut new: i8 = index as i8;
@@ -53,8 +53,8 @@ impl Rotor{
         //println!("{}", new);
         (new as u8) as char
     }
-    ///encode a character on its second time through rotor
-    /// expects uppercase chars
+    /// Encodes a character on its second time through a rotor.
+    /// Expects uppercase chars.
     pub(crate) fn encode_inverse(&self, c: &char, r: &RotorState) -> char{
         let mut index: usize = *c as usize;
         let mut new: i8 = index as i8;
@@ -80,7 +80,8 @@ impl Rotor{
         (new as u8) as char
     }
 }
-/// Represents the things about a rotor that can be changed fro the machine
+/// Represents the things about a rotor that can be changed from the machine.
+/// Specifically the current position and ring setting.
 #[derive(Clone)]
 pub(crate) struct RotorState{
     turn_offset: usize,
@@ -90,7 +91,7 @@ impl RotorState{
     pub fn new() -> RotorState{
         RotorState { turn_offset: 0, ring_setting: 0 }
     }
-    /// updates RotorState by incrementing turn_offset.
+    /// Updates RotorState by incrementing turn_offset.
     /// resets turn_offset to zero when 26 is reached
     pub fn turn(&mut self){
         self.turn_offset += 1;
@@ -98,7 +99,7 @@ impl RotorState{
             self.turn_offset -= 26;
         }
     }
-    /// returns position as an uppercase char
+    /// Returns position as an uppercase char.
     pub fn get_position(&self) -> char{
         char::from((self.turn_offset+65) as u8)
     }
