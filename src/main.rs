@@ -1,6 +1,54 @@
 use std::io::{Write, self};
+use std::str::SplitAsciiWhitespace;
 use enigma::{Rotor, Reflector, Machine};
 use enigma::{PlugError, RotorError};
+
+fn plug_handler(words: &mut SplitAsciiWhitespace, machine: &mut Machine){
+    //todo!("Implement");
+
+    let option = words.next();
+    let pair = words.next();
+    //println!("{:?}", pair);
+    let result;
+
+    match option{
+        Some("add") => {
+            if let Some(str_pair) = pair{
+                result = machine.add_plug(str_pair);
+            }
+            else{
+                println!("no pair given");
+                return;
+            }
+        }
+        Some("remove") => {
+            if let Some(str_pair) = pair{
+                result = machine.remove_plug(str_pair);
+            }
+            else{
+                println!("no pair given");
+                return;
+            }
+        }
+        _ => {
+            println!("Invalid option");
+            return;
+        }
+    }
+
+    match result{
+        Err(PlugError::InvalidPair) => {
+            println!("Invalid pair given");
+        }
+        Err(PlugError::LetterIsUsed) => {
+            println!("One of the letters is already used in another pair");
+        }
+        Err(PlugError::PairNotFound) => {
+            println!("Could not find pair to remove");
+        }
+        _ => {},
+    }
+}
 
 fn main(){
 
@@ -64,13 +112,13 @@ fn main(){
             Some("exit") => break,
             Some("encode") => {
                 print!("~");
-                io::stdout().flush().expect("flushess?");
+                io::stdout().flush().expect("flushless?");
                 input.clear();
                 io::stdin().read_line(&mut input).expect("kaboom");
                 print!("{}", machine_one.encode_message(&input));
             }
             Some("plug") => {
-                // TODO implement
+                plug_handler(&mut words, &mut machine_one);
             }
             Some("set") => {
                 // TODO implement
