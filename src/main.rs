@@ -3,10 +3,12 @@ use std::str::SplitAsciiWhitespace;
 use enigma::{Rotor, Reflector, Machine};
 use enigma::{PlugError, RotorError};
 
+/// handles plug related input options
 fn plug_handler(words: &mut SplitAsciiWhitespace, machine: &mut Machine){
     //todo!("Implement");
 
     let option = words.next();
+    // let option = words.next().unwrap_or();
     let pair = words.next();
     //println!("{:?}", pair);
     let result;
@@ -47,6 +49,66 @@ fn plug_handler(words: &mut SplitAsciiWhitespace, machine: &mut Machine){
             println!("Could not find pair to remove");
         }
         _ => {},
+    }
+}
+
+fn rotor_handler(words: &mut SplitAsciiWhitespace, machine: &mut Machine){
+    let rotor_option: &str = words.next().unwrap_or("");
+    let state_option: &str = words.next().unwrap_or("");
+    let char_option: &str = words.next().unwrap_or("");
+
+    let char_option: char = match char_option.chars().collect::<Vec<char>>()[..]{
+        [c] => Some(c),
+        _ => None,
+    }.unwrap_or('!');
+    let result: Result<(), RotorError>;
+
+    if rotor_option == "fast"{
+        if state_option == "position"{
+            result = machine.set_fast_position(char_option);
+        }
+        else if state_option == "ring"{
+            result = machine.set_fast_ring(char_option);
+        }
+        else{
+            println!("Invalid option");
+            return;
+        }
+    }
+    else if rotor_option == "medium"{
+        if state_option == "position"{
+            result = machine.set_medium_position(char_option);
+        }
+        else if state_option == "ring"{
+            result = machine.set_medium_ring(char_option);
+        }
+        else{
+            println!("Invalid option");
+            return;
+        }
+    }
+    else if rotor_option == "slow"{
+        if state_option == "position"{
+            result = machine.set_slow_position(char_option);
+        }
+        else if state_option == "ring"{
+            result = machine.set_slow_ring(char_option);
+        }
+        else{
+            println!("Invalid option");
+            return;
+        }
+    }
+    else{
+        println!("Invalid rotor choice");
+        return;
+    }
+
+    match result{
+        Err(RotorError::InvalidOption) => {
+            println!("Invalid char given");
+        }
+        _ => {}
     }
 }
 
@@ -122,10 +184,12 @@ fn main(){
             }
             Some("set") => {
                 // TODO implement
+                rotor_handler(&mut words, &mut machine_one);
             }
             Some("show") => {
                 machine_one.show_states();
             }
+            None => {/*literally do nothing*/}
             _ => println!("Invalid input")
         }
 
