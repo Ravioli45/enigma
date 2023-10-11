@@ -1,4 +1,5 @@
-use crate::{Rotor, Reflector, Plugboard, PlugError, RotorState, RotorError};
+use crate::{Rotor, Reflector, Plugboard, RotorState};
+use crate::errors::{PlugError, RotorError};
 
 /// Struct representing an enigma machine
 /// Consists of three rotors and a reflector

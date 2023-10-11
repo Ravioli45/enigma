@@ -1,7 +1,7 @@
 use std::io::{Write, self};
 use std::str::SplitAsciiWhitespace;
-use enigma::{Rotor, Reflector, Machine};
-use enigma::{PlugError, RotorError};
+use enigma::{Reflector, Machine, Rotor, RotorState};
+use enigma::errors::{RotorError, PlugError};
 
 /// handles plug related input options
 fn plug_handler(words: &mut SplitAsciiWhitespace, machine: &mut Machine){
