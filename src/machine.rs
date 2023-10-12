@@ -89,24 +89,14 @@ impl Machine<'_>{
         return encoded;
     }
 
-    // guess what these do
-    pub fn set_fast_position(&mut self, c: char) -> Result<(), RotorError>{
-        self.fast_state.set_position(c)
+    pub fn get_fast_state_mut_ref(&mut self) -> &mut RotorState{
+        &mut self.fast_state
     }
-    pub fn set_medium_position(&mut self, c: char) -> Result<(), RotorError>{
-        self.medium_state.set_position(c)
+    pub fn get_medium_state_mut_ref(&mut self) -> &mut RotorState{
+        &mut self.medium_state
     }
-    pub fn set_slow_position(&mut self, c: char) -> Result<(), RotorError>{
-        self.slow_state.set_position(c)
-    }
-    pub fn set_fast_ring(&mut self, c: char) -> Result<(), RotorError>{
-        self.fast_state.set_ring_setting(c)
-    }
-    pub fn set_medium_ring(&mut self, c: char) -> Result<(), RotorError>{
-        self.medium_state.set_ring_setting(c)
-    }
-    pub fn set_slow_ring(&mut self, c: char) -> Result<(), RotorError>{
-        self.slow_state.set_ring_setting(c)
+    pub fn get_slow_state_mut_ref(&mut self) -> &mut RotorState{
+        &mut self.slow_state
     }
 
     pub fn add_plug(&mut self, pair: &str) -> Result<(), PlugError>{

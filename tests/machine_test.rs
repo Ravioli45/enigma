@@ -22,13 +22,19 @@ fn machine_test(){
 
     let mut machine: Machine = Machine::new(&rotor_one, &rotor_two, &rotor_three, &ukw_b);
 
-    machine.set_fast_position('p').unwrap();
-    machine.set_medium_position('d').unwrap();
-    machine.set_slow_position('k').unwrap();
+    //machine.set_fast_position('p').unwrap();
+    machine.get_fast_state_mut_ref().set_position('p').unwrap();
+    //machine.set_medium_position('d').unwrap();
+    machine.get_medium_state_mut_ref().set_position('d').unwrap();
+    //machine.set_slow_position('k').unwrap();
+    machine.get_slow_state_mut_ref().set_position('k').unwrap();
 
-    machine.set_fast_ring('l').unwrap();
-    machine.set_medium_ring('m').unwrap();
-    machine.set_slow_ring('n').unwrap();
+    //machine.set_fast_ring('l').unwrap();
+    machine.get_fast_state_mut_ref().set_ring_setting('l').unwrap();
+    //machine.set_medium_ring('m').unwrap();
+    machine.get_medium_state_mut_ref().set_ring_setting('m').unwrap();
+    //machine.set_slow_ring('n').unwrap();
+    machine.get_slow_state_mut_ref().set_ring_setting('n').unwrap();
 
     machine.add_plug("mv").unwrap();
     machine.add_plug("ob").unwrap();

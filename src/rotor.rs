@@ -88,12 +88,12 @@ pub struct RotorState{
     ring_setting: usize,
 }
 impl RotorState{
-    pub fn new() -> RotorState{
+    pub(crate) fn new() -> RotorState{
         RotorState { turn_offset: 0, ring_setting: 0 }
     }
     /// Updates RotorState by incrementing turn_offset.
     /// resets turn_offset to zero when 26 is reached
-    pub fn turn(&mut self){
+    pub(crate) fn turn(&mut self){
         self.turn_offset += 1;
         if self.turn_offset > 25{
             self.turn_offset -= 26;

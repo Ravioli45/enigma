@@ -7,108 +7,71 @@ use enigma::errors::{RotorError, PlugError};
 fn plug_handler(words: &mut SplitAsciiWhitespace, machine: &mut Machine){
     //todo!("Implement");
 
-    let option = words.next();
-    // let option = words.next().unwrap_or();
-    let pair = words.next();
+    //let option = words.next();
+    //let pair = words.next();
+    let (Some(option), Some(pair)) = (words.next(), words.next()) else{
+        println!("Not enough arguments given");
+        return;
+    };
     //println!("{:?}", pair);
     let result;
 
-    match option{
-        Some("add") => {
-            if let Some(str_pair) = pair{
-                result = machine.add_plug(str_pair);
-            }
-            else{
-                println!("no pair given");
-                return;
-            }
-        }
-        Some("remove") => {
-            if let Some(str_pair) = pair{
-                result = machine.remove_plug(str_pair);
-            }
-            else{
-                println!("no pair given");
-                return;
-            }
-        }
-        _ => {
-            println!("Invalid option");
-            return;
-        }
+    if option == "add"{
+        result = machine.add_plug(pair);
+    }
+    else if option == "remove"{
+        result = machine.remove_plug(pair);
+    }
+    else{
+        println!("Invalid option");
+        return;
     }
 
     match result{
-        Err(PlugError::InvalidPair) => {
-            println!("Invalid pair given");
-        }
-        Err(PlugError::LetterIsUsed) => {
-            println!("One of the letters is already used in another pair");
-        }
-        Err(PlugError::PairNotFound) => {
-            println!("Could not find pair to remove");
-        }
+        Err(PlugError::InvalidPair) => println!("Invalid pair given"),
+        Err(PlugError::LetterIsUsed) => println!("One of the letters is already used in another pair"),
+        Err(PlugError::PairNotFound) => println!("Could not find pair to remove"),
         _ => {},
     }
 }
 
 fn rotor_handler(words: &mut SplitAsciiWhitespace, machine: &mut Machine){
-    let rotor_option: &str = words.next().unwrap_or("");
-    let state_option: &str = words.next().unwrap_or("");
-    let char_option: &str = words.next().unwrap_or("");
+    let (Some(rotor_option), Some(state_option), Some(char_option)) = (words.next(), words.next(), words.next()) else{
+        println!("Not enough arguments given");
+        return;
+    };
 
+    // get char from &str
     let char_option: char = match char_option.chars().collect::<Vec<char>>()[..]{
         [c] => Some(c),
         _ => None,
     }.unwrap_or('!');
-    let result: Result<(), RotorError>;
 
-    if rotor_option == "fast"{
-        if state_option == "position"{
-            result = machine.set_fast_position(char_option);
-        }
-        else if state_option == "ring"{
-            result = machine.set_fast_ring(char_option);
-        }
-        else{
-            println!("Invalid option");
+    let rotor_ref: &mut RotorState = match rotor_option{
+        "fast" => machine.get_fast_state_mut_ref(),
+        "medium" => machine.get_medium_state_mut_ref(),
+        "slow" => machine.get_slow_state_mut_ref(),
+        _ => {
+            println!("Invalid rotor option");
             return;
         }
+    };
+
+    let result: Result<(), RotorError>;
+    if state_option == "position"{
+        result = rotor_ref.set_position(char_option);
     }
-    else if rotor_option == "medium"{
-        if state_option == "position"{
-            result = machine.set_medium_position(char_option);
-        }
-        else if state_option == "ring"{
-            result = machine.set_medium_ring(char_option);
-        }
-        else{
-            println!("Invalid option");
-            return;
-        }
-    }
-    else if rotor_option == "slow"{
-        if state_option == "position"{
-            result = machine.set_slow_position(char_option);
-        }
-        else if state_option == "ring"{
-            result = machine.set_slow_ring(char_option);
-        }
-        else{
-            println!("Invalid option");
-            return;
-        }
+    else if state_option == "ring"{
+        result = rotor_ref.set_ring_setting(char_option);
     }
     else{
-        println!("Invalid rotor choice");
+        println!("Invalid option");
         return;
     }
 
     match result{
-        Err(RotorError::InvalidOption) => {
-            println!("Invalid char given");
-        }
-        _ => {}
+        Err(RotorError::InvalidOption) => println!("Invalid setting"),
+        Ok(()) => {},
     }
 }
 
@@ -134,9 +97,12 @@ fn main(){
     //rotor_two.set_position('d');
     //rotor_one.set_ring_setting('B');
     let mut machine_one: Machine = Machine::new(&rotor_one, &rotor_two, &rotor_three, &ukw_b);
-    machine_one.set_fast_position('p').unwrap();
-    machine_one.set_medium_position('d').unwrap();
-    machine_one.set_fast_ring('b').unwrap();
+    //machine_one.set_fast_position('p').unwrap();
+    machine_one.get_fast_state_mut_ref().set_position('p').unwrap();
+    //machine_one.set_medium_position('d').unwrap();
+    machine_one.get_medium_state_mut_ref().set_position('d').unwrap();
+    //machine_one.set_fast_ring('b').unwrap();
+    machine_one.get_fast_state_mut_ref().set_ring_setting('b').unwrap();
     match machine_one.add_plug("ob"){
         Err(e) => println!("{:?}", e),
         Ok(_) => println!("yes"),
