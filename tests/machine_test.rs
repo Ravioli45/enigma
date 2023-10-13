@@ -39,7 +39,20 @@ fn machine_test(){
     machine.add_plug("mv").unwrap();
     machine.add_plug("ob").unwrap();
 
-    let encoded = machine.encode_message("Hello world!");
-    assert!(encoded == "Lvmof qgtki!");
+    //let encoded = machine.encode_message("Hello world!");
+    
+    // made by using a lorem ipsum generator
+    let message = "vitae congue eu consequat ac felis donec et odio pellentesque diam \
+    volutpat commodo sed egestas egestas fringilla phasellus faucibus scelerisque eleifend \
+    donec pretium vulputate sapien nec sagittis aliquam malesuada bibendum arcu vitae elementum \
+    curabitur vitae nunc sed velit dignissim sodales ut eu sem integer vitae justo eget magna fermentum iaculis";
+    let expected_encoded = "cbbek zgyrph dc siixoszpa zo garjq zycfj ka ftoy njkihykmlteu zsla \
+    byrzzupg nlndbps hho dfrtndd tnqyiim lackayhfh jpjhazdmd gqpeygou cudkzyjplgy ghnhdnxr mzjrm abodcto \
+    rbxvzvcav ymzebi ypz ikffostc scrhczn gossajmue fcncorfi zosl iozsa axigxijjp draqzgfkk ivicp lbtj zbr rwumi \
+    mxzrheddg yeovphx we wo hnu pqipxhk pjehg dyznr sjgs heikp rzyjwaolr lrwxspp";
+    
+
+    let actual_encoded = machine.encode_message(message);
+    assert!(actual_encoded == expected_encoded);
 
 }
