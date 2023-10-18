@@ -109,7 +109,11 @@ impl Machine<'_>{
 
     pub fn show_states(&self){
 
-        println!("{:>21}{:>21}{:>21}", "slow rotor:", "medium rotor:", "fast rotor:");
+        println!("{:>21}{:>21}{:>21}", "slow:", "medium:", "fast:");
+        print!("Rotors:");
+        print!("{:>14}", self.slow_rotor.get_name());
+        print!("{:>21}", self.medium_rotor.get_name());
+        println!("{:>21}", self.fast_rotor.get_name());
         print!("positions:");
         print!("{:>11}", self.slow_state.get_position());
         print!("{:>21}", self.medium_state.get_position());

@@ -6,6 +6,7 @@ pub enum RotorError{
 /// Represents a singular enigma machine rotor
 #[derive(Clone)]
 pub struct Rotor{
+    name: String,
     forward_shifts: [i8; 26],
     inverse_shifts: [i8; 26],
     turnover: usize,
@@ -14,9 +15,10 @@ impl Rotor{
 
     ///Takes information and constructs a new rotor.
     ///The new rotor is returned.
-    pub fn new(the_f_shifts: [i8;26], the_i_shifts: [i8;26], the_turnover: char) -> Rotor{
+    pub fn new(the_name: String, the_f_shifts: [i8;26], the_i_shifts: [i8;26], the_turnover: char) -> Rotor{
 
         Rotor{
+            name: the_name,
             forward_shifts: the_f_shifts,
             inverse_shifts: the_i_shifts,
             turnover: (the_turnover.to_ascii_uppercase() as usize) - 65,
@@ -25,6 +27,10 @@ impl Rotor{
 
     pub fn get_turnover(&self) -> char{
         char::from((self.turnover + 65) as u8)
+    }
+
+    pub fn get_name(&self) -> &str{
+        &self.name
     }
 
     /// Encodes a char on its first time through a rotor.
