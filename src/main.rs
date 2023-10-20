@@ -1,7 +1,10 @@
 use std::io::{Write, self};
 use std::str::SplitAsciiWhitespace;
+use std::collections::HashMap;
 use enigma::{Reflector, Machine, Rotor, RotorState};
 use enigma::errors::{RotorError, PlugError};
+
+const TOO_FEW_ARGS: &str = "Not enough arguments given";
 
 /// handles plug related input options
 fn plug_handler(words: &mut SplitAsciiWhitespace, machine: &mut Machine){
@@ -10,7 +13,7 @@ fn plug_handler(words: &mut SplitAsciiWhitespace, machine: &mut Machine){
     //let option = words.next();
     //let pair = words.next();
     let (Some(option), Some(pair)) = (words.next(), words.next()) else{
-        println!("Not enough arguments given");
+        println!("{}", TOO_FEW_ARGS);
         return;
     };
     //println!("{:?}", pair);
@@ -37,7 +40,7 @@ fn plug_handler(words: &mut SplitAsciiWhitespace, machine: &mut Machine){
 
 fn rotor_handler(words: &mut SplitAsciiWhitespace, machine: &mut Machine){
     let (Some(rotor_option), Some(state_option), Some(char_option)) = (words.next(), words.next(), words.next()) else{
-        println!("Not enough arguments given");
+        println!("{}", TOO_FEW_ARGS);
         return;
     };
 
@@ -72,6 +75,32 @@ fn rotor_handler(words: &mut SplitAsciiWhitespace, machine: &mut Machine){
     match result{
         Err(RotorError::InvalidOption) => println!("Invalid setting"),
         Ok(()) => {},
+    }
+}
+
+fn set_handler<'a>(words: &mut SplitAsciiWhitespace, machine: &mut Machine<'a>, rotor_map: &HashMap<&str, &'a Rotor>){
+    let (Some(rotor_position), Some(rotor)) = (words.next(), words.next()) else{
+        println!("{}", TOO_FEW_ARGS);
+        return;
+    };
+    //println!("{}, {}", rotor, rotor_position);
+    
+    if let Some(r) = rotor_map.get(rotor){
+        if rotor_position == "fast"{
+            machine.set_fast_rotor(*r);
+        }
+        else if rotor_position == "medium"{
+            machine.set_medium_rotor(*r);
+        }
+        else if rotor_position == "slow"{
+            machine.set_slow_rotor(*r);
+        }
+        else{
+            println!("Invalid rotor position");
+        }
+    }
+    else{
+        println!("Invalid option");
     }
 }
 
@@ -118,6 +147,10 @@ fn main(){
 
     //println!("{}", machine_one.encode_message("abcdefghijklmnopqrstuvwxyz"));
     //println!("{}", machine_one.encode_message("Aoawa zqjzr!"));
+    let mut available_rotors: HashMap<&str, &Rotor> = HashMap::with_capacity(3);
+    available_rotors.insert(rotor_one.get_name(), &rotor_one);
+    available_rotors.insert(rotor_two.get_name(), &rotor_two);
+    available_rotors.insert(rotor_three.get_name(), &rotor_three);
 
     let mut input: String = String::new();
     let mut words;
@@ -132,7 +165,7 @@ fn main(){
 
         // trims whitespace from input
         input = input.trim().to_string();
-        input.make_ascii_lowercase();
+        //input.make_ascii_lowercase();
 
         words = input.split_ascii_whitespace();
 
@@ -148,9 +181,11 @@ fn main(){
             Some("plug") => {
                 plug_handler(&mut words, &mut machine_one);
             }
-            Some("set") => {
-
+            Some("rotor") => {
                 rotor_handler(&mut words, &mut machine_one);
+            }
+            Some("set") => {
+                set_handler(&mut words, &mut machine_one, &available_rotors)
             }
             Some("show") => {
                 machine_one.show_states();

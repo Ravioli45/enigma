@@ -1,5 +1,5 @@
 use crate::{Rotor, Reflector, Plugboard, RotorState};
-use crate::errors::{PlugError, RotorError};
+use crate::errors::PlugError;
 
 /// Struct representing an enigma machine
 /// Consists of three rotors and a reflector
@@ -13,9 +13,9 @@ pub struct Machine<'a>{
     reflector: &'a Reflector,
     plugboard: Plugboard,
 }
-impl Machine<'_>{
+impl<'a> Machine<'a>{
 
-    pub fn new<'a>(the_fast: &'a Rotor, the_medium: &'a Rotor, the_slow: &'a Rotor, the_reflect: &'a Reflector) -> Machine<'a>{
+    pub fn new(the_fast: &'a Rotor, the_medium: &'a Rotor, the_slow: &'a Rotor, the_reflect: &'a Reflector) -> Machine<'a>{
 
         Machine{
             fast_rotor: the_fast,
@@ -102,9 +102,18 @@ impl Machine<'_>{
     pub fn add_plug(&mut self, pair: &str) -> Result<(), PlugError>{
         self.plugboard.make_pair(pair)
     }
-
     pub fn remove_plug(&mut self, pair: &str) -> Result<(), PlugError>{
         self.plugboard.remove_pair(pair)
+    }
+
+    pub fn set_fast_rotor(&mut self, rotor_ref: &'a Rotor){
+        self.fast_rotor = rotor_ref;
+    }
+    pub fn set_medium_rotor(&mut self, rotor_ref: &'a Rotor){
+        self.medium_rotor = rotor_ref;
+    }
+    pub fn set_slow_rotor(&mut self, rotor_ref: &'a Rotor){
+        self.slow_rotor = rotor_ref;
     }
 
     pub fn show_states(&self){
