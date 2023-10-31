@@ -2,10 +2,11 @@
 /// Sends signal back through rotors
 #[derive(Clone)]
 pub struct Reflector{
+    name: String,
     wiring: [char; 26],
 }
 impl Reflector{
-    pub fn new(outs: &[char; 26]) -> Reflector{
+    pub fn new(the_name: String, outs: &[char; 26]) -> Reflector{
         
         // an ins array would always just be the alphabet in order
 
@@ -15,9 +16,14 @@ impl Reflector{
         }
 
         Reflector{
+            name: the_name,
             wiring: w,
         }
 
+    }
+
+    pub fn get_name(&self) -> &str{
+        &self.name
     }
 
     /// Returns letter that is wired to the received letter

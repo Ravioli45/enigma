@@ -104,6 +104,21 @@ fn set_handler<'a>(words: &mut SplitAsciiWhitespace, machine: &mut Machine<'a>, 
     }
 }
 
+fn reflector_handler<'a>(words: &mut SplitAsciiWhitespace, machine: &mut Machine<'a>, reflector_map: &HashMap<&str, &'a Reflector>){
+
+    let Some(reflector_option) = words.next() else{
+        println!("{}", TOO_FEW_ARGS);
+        return;
+    };
+
+    if let Some(new_reflector) = reflector_map.get(reflector_option){
+        machine.set_reflector(*new_reflector);
+    } 
+    else{
+        println!("Invalid option");
+    }
+}
+
 fn main(){
 
     let rotor_one_f: [i8; 26] = [4, 9, 10, 2, 7, 1, -3, 9, 13, 16, 3, 8, 2, 9, 10, -8, 7, 3, 0, -4, -20, -13, -21, -6, -22, -16];
@@ -120,8 +135,10 @@ fn main(){
     let rotor_three: Rotor = Rotor::new("III".to_string(), rotor_three_f, rotor_three_i, 'v');
 
     let ukw_b_out: [char; 26] = ['y', 'r', 'u', 'h', 'q', 's', 'l', 'd', 'p', 'x', 'n', 'g', 'o', 'k', 'm', 'i', 'e', 'b', 'f', 'z', 'c', 'w', 'v', 'j', 'a', 't'];
-    let ukw_b: Reflector = Reflector::new(&ukw_b_out);
+    let ukw_b: Reflector = Reflector::new("ukw-b".to_string(), &ukw_b_out);
 
+    let ukw_a_out: [char; 26] = ['e', 'j', 'm', 'z', 'a', 'l', 'y', 'x', 'v', 'b', 'w', 'f', 'c', 'r', 'q', 'u', 'o', 'n', 't', 's', 'p', 'i', 'k', 'h', 'g', 'd'];
+    let ukw_a: Reflector = Reflector::new("ukw-a".to_string(), &ukw_a_out);
     //rotor_one.set_position('p');
     //rotor_two.set_position('d');
     //rotor_one.set_ring_setting('B');
@@ -151,6 +168,10 @@ fn main(){
     available_rotors.insert(rotor_one.get_name(), &rotor_one);
     available_rotors.insert(rotor_two.get_name(), &rotor_two);
     available_rotors.insert(rotor_three.get_name(), &rotor_three);
+
+    let mut available_reflectors: HashMap<&str, &Reflector> = HashMap::with_capacity(2);
+    available_reflectors.insert(ukw_b.get_name(), &ukw_b);
+    available_reflectors.insert(ukw_a.get_name(), &ukw_a);
 
     let mut input: String = String::new();
     let mut words;
@@ -185,7 +206,10 @@ fn main(){
                 rotor_handler(&mut words, &mut machine_one);
             }
             Some("set") => {
-                set_handler(&mut words, &mut machine_one, &available_rotors)
+                set_handler(&mut words, &mut machine_one, &available_rotors);
+            }
+            Some("reflector") => {
+                reflector_handler(&mut words, &mut machine_one, &available_reflectors);
             }
             Some("show") => {
                 machine_one.show_states();

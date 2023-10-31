@@ -18,7 +18,7 @@ fn machine_test(){
     let rotor_three: Rotor = Rotor::new("III".to_string(), rotor_three_f, rotor_three_i, 'v');
 
     let ukw_b_out: [char; 26] = ['y', 'r', 'u', 'h', 'q', 's', 'l', 'd', 'p', 'x', 'n', 'g', 'o', 'k', 'm', 'i', 'e', 'b', 'f', 'z', 'c', 'w', 'v', 'j', 'a', 't'];
-    let ukw_b: Reflector = Reflector::new(&ukw_b_out);
+    let ukw_b: Reflector = Reflector::new("ukw-b".to_string(), &ukw_b_out);
 
     let mut machine: Machine = Machine::new(&rotor_one, &rotor_two, &rotor_three, &ukw_b);
 

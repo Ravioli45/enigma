@@ -115,6 +115,9 @@ impl<'a> Machine<'a>{
     pub fn set_slow_rotor(&mut self, rotor_ref: &'a Rotor){
         self.slow_rotor = rotor_ref;
     }
+    pub fn set_reflector(&mut self, reflector_ref: &'a Reflector){
+        self.reflector = reflector_ref
+    }
 
     pub fn show_states(&self){
 
@@ -132,6 +135,7 @@ impl<'a> Machine<'a>{
         print!("{:>21}", self.medium_state.get_ring_setting());
         println!("{:>21}", self.fast_state.get_ring_setting());
 
+        println!("Reflector: {}", self.reflector.get_name());
         print!("Plugboard: ");
         println!("{}", self.plugboard);
     }
