@@ -40,6 +40,19 @@ impl PlugboardPair{
             None
         }
     }
+    /// returns true of pair is valid and false otherwise
+    fn is_valid_pair(pair: &str) -> bool{
+        if pair.len() == 2{
+            let mut cs = pair.chars();
+            let first: char = cs.nth(0).unwrap();
+            let second: char = cs.nth(0).unwrap();
+
+            (first.is_ascii_alphabetic() && second.is_ascii_alphabetic()) && (first != second)
+        }
+        else{
+            false
+        }
+    }
 }
 impl fmt::Display for PlugboardPair{
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result{
@@ -59,7 +72,7 @@ impl Plugboard{
 
     pub fn make_pair(&mut self, pair: &str) -> Result<(), PlugError>{
         // if pair can be turned into a valid pair
-        if Plugboard::is_valid_pair(pair){
+        if PlugboardPair::is_valid_pair(pair){
             // seperate the chars that represent the pair
             let byte_pair = pair.as_bytes();
             let first: char = byte_pair[0].to_ascii_uppercase() as char;
@@ -82,7 +95,7 @@ impl Plugboard{
 
     pub fn remove_pair(&mut self, pair: &str) -> Result<(), PlugError>{
         // if pair represents a valid pair
-        if Plugboard::is_valid_pair(pair){
+        if PlugboardPair::is_valid_pair(pair){
             // seperate the chars that represent the pair
             let byte_pair = pair.as_bytes();
             let first: char = byte_pair[0].to_ascii_uppercase() as char;
@@ -114,21 +127,6 @@ impl Plugboard{
         };
         return *c;
     }
-
-    /// returns true of pair is valid and false otherwise
-    fn is_valid_pair(pair: &str) -> bool{
-        if pair.len() == 2{
-            let mut cs = pair.chars();
-            let first: char = cs.nth(0).unwrap();
-            let second: char = cs.nth(0).unwrap();
-
-            (first.is_ascii_alphabetic() && second.is_ascii_alphabetic()) && (first != second)
-        }
-        else{
-            false
-        }
-    }
-
 }
 impl fmt::Display for Plugboard{
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result{
