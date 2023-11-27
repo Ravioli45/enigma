@@ -9,7 +9,7 @@ pub enum PlugError{
 
 /// Represents a pair of linked letters on a plugboard
 #[derive(Clone)]
-struct PlugboardPair{
+pub(crate) struct PlugboardPair{
     first: char,
     second: char
 }
@@ -60,6 +60,7 @@ impl fmt::Display for PlugboardPair{
     }
 }
 
+#[derive(Clone)]
 pub(crate) struct Plugboard{
     pairs: Vec<PlugboardPair>
 }

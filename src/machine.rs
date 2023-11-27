@@ -1,4 +1,4 @@
-use crate::{Rotor, Reflector, Plugboard, RotorState};
+use crate::{Rotor, Reflector, Plugboard, RotorState, PlugboardPair};
 use crate::errors::PlugError;
 
 /// Struct representing an enigma machine
@@ -119,6 +119,34 @@ impl<'a> Machine<'a>{
         self.reflector = reflector_ref
     }
 
+    
+    pub fn save_state(&self) -> MachineState<'a>{
+        MachineState { 
+            fast_rotor: self.fast_rotor, 
+            medium_rotor: self.medium_rotor, 
+            slow_rotor: self.slow_rotor, 
+            fast_state: self.fast_state.clone(), 
+            medium_state: self.medium_state.clone(), 
+            slow_state: self.slow_state.clone(), 
+            pairs: self.plugboard.clone(), 
+            reflector: self.reflector
+        }
+    }
+    
+    pub fn load_state(&mut self, state: MachineState<'a>){
+        self.set_fast_rotor(state.fast_rotor);
+        self.set_medium_rotor(state.medium_rotor);
+        self.set_slow_rotor(state.slow_rotor);
+
+        self.fast_state = state.fast_state.clone();
+        self.medium_state = state.medium_state.clone();
+        self.slow_state = state.slow_state.clone();
+
+        self.plugboard = state.pairs.clone();
+        self.set_reflector(state.reflector);
+    }
+    
+
     pub fn show_states(&self){
 
         println!("{:>21}{:>21}{:>21}", "slow:", "medium:", "fast:");
@@ -139,4 +167,21 @@ impl<'a> Machine<'a>{
         print!("Plugboard: ");
         println!("{}", self.plugboard);
     }
+}
+
+#[derive(Clone)]
+pub struct MachineState<'a>{
+    fast_rotor: &'a Rotor,
+    medium_rotor: &'a Rotor,
+    slow_rotor: &'a Rotor,
+    fast_state: RotorState,
+    medium_state: RotorState,
+    slow_state: RotorState,
+
+    pairs: Plugboard,
+
+    reflector: &'a Reflector
+}
+impl<'a> MachineState<'a>{
+    
 }

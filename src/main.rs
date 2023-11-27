@@ -1,7 +1,7 @@
 use std::io::{Write, self};
 use std::str::SplitAsciiWhitespace;
 use std::collections::HashMap;
-use enigma::{Reflector, Machine, Rotor, RotorState};
+use enigma::{Reflector, Machine, Rotor, RotorState, MachineState};
 use enigma::errors::{RotorError, PlugError};
 
 const TOO_FEW_ARGS: &str = "Not enough arguments given";
@@ -173,6 +173,8 @@ fn main(){
     available_reflectors.insert(ukw_b.get_name(), &ukw_b);
     available_reflectors.insert(ukw_a.get_name(), &ukw_a);
 
+    let mut savedState: Option<MachineState> = None;
+
     let mut input: String = String::new();
     let mut words;
     println!("Rust Enigma v2");
@@ -210,6 +212,19 @@ fn main(){
             }
             Some("reflector") => {
                 reflector_handler(&mut words, &mut machine_one, &available_reflectors);
+            }
+            Some("save") => {
+                savedState = Some(machine_one.save_state());
+                println!("Saved state");
+            }
+            Some("load") => {
+                if let Some(state) = savedState.clone(){
+                    machine_one.load_state(state);
+                    println!("State loaded")
+                }
+                else{
+                    println!("No state to load");
+                }
             }
             Some("show") => {
                 machine_one.show_states();
